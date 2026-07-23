@@ -5,6 +5,8 @@
 
 import { PlatformConfig } from '../';
 
+declare const process: { env: Record<string, string | undefined> } | undefined;
+
 export class ConfigValidationError extends Error {
   constructor(public readonly errors: readonly string[]) {
     super(`[Warborn Config Validation Error]:\n  - ${errors.join('\n  - ')}`);
@@ -16,7 +18,8 @@ export function validateConfig(config: PlatformConfig): void {
   const errors: string[] = [];
 
   if (config.environment.isProduction) {
-    if (!process.env[config.auth.jwtSecretEnvVar]) {
+    const envObj = typeof process !== 'undefined' && process?.env ? process.env : {};
+    if (!envObj[config.auth.jwtSecretEnvVar]) {
       errors.push(`Production mode requires ${config.auth.jwtSecretEnvVar} environment variable to be set.`);
     }
   }

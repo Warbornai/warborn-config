@@ -3,6 +3,8 @@
  * @module @warborn/config/environment
  */
 
+declare const process: { env: Record<string, string | undefined> } | undefined;
+
 export type EnvironmentMode = 'development' | 'test' | 'staging' | 'production' | 'local';
 
 export interface EnvironmentConfig {
@@ -14,7 +16,8 @@ export interface EnvironmentConfig {
 }
 
 export function parseEnvironment(modeString?: string): EnvironmentConfig {
-  const env = (modeString || process.env.NODE_ENV || 'development').toLowerCase();
+  const nodeEnvVal = typeof process !== 'undefined' && process?.env ? process.env.NODE_ENV : 'development';
+  const env = (modeString || nodeEnvVal || 'development').toLowerCase();
   let mode: EnvironmentMode = 'development';
 
   if (env === 'production' || env === 'prod') mode = 'production';
