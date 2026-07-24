@@ -4,13 +4,24 @@
  */
 export interface ProviderBaseConfig {
     readonly enabled: boolean;
-    readonly baseUrl: string;
+    readonly baseUrl?: string;
+    readonly region?: string;
     readonly apiKeyEnvVar?: string;
     readonly defaultModel: string;
     readonly timeoutMs: number;
     readonly maxRetries: number;
+    readonly maxTokens?: number;
+    readonly temperature?: number;
+    readonly topP?: number;
+}
+export interface BedrockProviderConfig extends ProviderBaseConfig {
+    readonly region: string;
+    readonly accessKeyIdEnvVar: string;
+    readonly secretAccessKeyEnvVar: string;
+    readonly modelId: string;
 }
 export interface AIProvidersConfig {
+    readonly bedrock: BedrockProviderConfig;
     readonly openai: ProviderBaseConfig;
     readonly anthropic: ProviderBaseConfig;
     readonly gemini: ProviderBaseConfig;

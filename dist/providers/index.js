@@ -5,7 +5,21 @@
  */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.defaultProvidersConfig = void 0;
+const env = typeof process !== 'undefined' ? process.env || {} : {};
 exports.defaultProvidersConfig = {
+    bedrock: {
+        enabled: true,
+        region: env.AWS_REGION || 'us-east-1',
+        accessKeyIdEnvVar: 'AWS_ACCESS_KEY_ID',
+        secretAccessKeyEnvVar: 'AWS_SECRET_ACCESS_KEY',
+        defaultModel: env.BEDROCK_MODEL_ID || 'amazon.titan-text-express-v1',
+        modelId: env.BEDROCK_MODEL_ID || 'amazon.titan-text-express-v1',
+        maxTokens: parseInt(env.BEDROCK_MAX_TOKENS || '2048', 10),
+        temperature: parseFloat(env.BEDROCK_TEMPERATURE || '0.7'),
+        topP: parseFloat(env.BEDROCK_TOP_P || '0.9'),
+        timeoutMs: parseInt(env.BEDROCK_TIMEOUT || '30000', 10),
+        maxRetries: 3,
+    },
     openai: {
         enabled: true,
         baseUrl: 'https://api.openai.com/v1',

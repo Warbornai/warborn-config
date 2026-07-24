@@ -3,16 +3,30 @@
  * @module @warborn/config/providers
  */
 
+declare const process: any;
+
 export interface ProviderBaseConfig {
   readonly enabled: boolean;
-  readonly baseUrl: string;
+  readonly baseUrl?: string;
+  readonly region?: string;
   readonly apiKeyEnvVar?: string;
   readonly defaultModel: string;
   readonly timeoutMs: number;
   readonly maxRetries: number;
+  readonly maxTokens?: number;
+  readonly temperature?: number;
+  readonly topP?: number;
+}
+
+export interface BedrockProviderConfig extends ProviderBaseConfig {
+  readonly region: string;
+  readonly accessKeyIdEnvVar: string;
+  readonly secretAccessKeyEnvVar: string;
+  readonly modelId: string;
 }
 
 export interface AIProvidersConfig {
+  readonly bedrock: BedrockProviderConfig;
   readonly openai: ProviderBaseConfig;
   readonly anthropic: ProviderBaseConfig;
   readonly gemini: ProviderBaseConfig;
@@ -24,7 +38,22 @@ export interface AIProvidersConfig {
   readonly azureOpenai: ProviderBaseConfig & { readonly apiVersion?: string; readonly resourceName?: string };
 }
 
+const env = typeof process !== 'undefined' ? process.env || {} : {};
+
 export const defaultProvidersConfig: AIProvidersConfig = {
+  bedrock: {
+    enabled: true,
+    region: env.AWS_REGION || 'us-east-1',
+    accessKeyIdEnvVar: 'AWS_ACCESS_KEY_ID',
+    secretAccessKeyEnvVar: 'AWS_SECRET_ACCESS_KEY',
+    defaultModel: env.BEDROCK_MODEL_ID || 'amazon.titan-text-express-v1',
+    modelId: env.BEDROCK_MODEL_ID || 'amazon.titan-text-express-v1',
+    maxTokens: parseInt(env.BEDROCK_MAX_TOKENS || '2048', 10),
+    temperature: parseFloat(env.BEDROCK_TEMPERATURE || '0.7'),
+    topP: parseFloat(env.BEDROCK_TOP_P || '0.9'),
+    timeoutMs: parseInt(env.BEDROCK_TIMEOUT || '30000', 10),
+    maxRetries: 3,
+  },
   openai: {
     enabled: true,
     baseUrl: 'https://api.openai.com/v1',
