@@ -40,6 +40,29 @@
   "devDependencies": {
     "typescript": "^5.4.0"
   },
-  "author": "Warborn Technologies",
-  "license": "MIT"
+  "author": "Warborn Technologies <support@warborn.tech>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Warbornai/warborn-config.git"
+  },
+  "homepage": "https://github.com/Warbornai/warborn-config#readme",
+  "bugs": {
+    "url": "https://github.com/Warbornai/warborn-config/issues"
+  },
+  "keywords": [
+    "warborn",
+    "ai-operating-system",
+    "autonomous-agents",
+    "warborn-brain",
+    "config"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ]
 }
